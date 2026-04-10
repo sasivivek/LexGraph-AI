@@ -460,6 +460,10 @@ def chat_with_context(
     if not model:
         return _fallback_chat(user_message, context_data)
 
+    models_to_try = [_model]
+    if _fallback_model:
+        models_to_try.append(_fallback_model)
+
     # Ensure session exists
     if session_id not in _chat_sessions:
         _chat_sessions[session_id] = []
@@ -492,40 +496,51 @@ def chat_with_context(
         except Exception:
             pass  # PDF enrichment is best-effort
 
-    try:
-        # Create a Gemini chat session with system instruction and history
-        chat = model.start_chat(history=history)
+    response = None
+    last_error = None
 
-        # If this is the first message in the session, prepend system prompt
-        if len(history) == 0:
-            # Use system instruction via the first exchange
-            system_setup = CHAT_SYSTEM_PROMPT
-            first_prompt = f"{system_setup}\n\n---\n\nUser message:\n{full_user_text}"
-            response = _call_gemini_chat(chat, first_prompt)
-        else:
-            response = _call_gemini_chat(chat, full_user_text)
+    for active_model in models_to_try:
+        try:
+            # Create a Gemini chat session with system instruction and history
+            chat = active_model.start_chat(history=history)
 
-        # Update history with the new exchange
-        history.append({"role": "user", "parts": [full_user_text]})
-        history.append({"role": "model", "parts": [response]})
+            # If this is the first message in the session, prepend system prompt
+            if len(history) == 0:
+                # Use system instruction via the first exchange
+                system_setup = CHAT_SYSTEM_PROMPT
+                first_prompt = f"{system_setup}\n\n---\n\nUser message:\n{full_user_text}"
+                response = _call_gemini_chat(chat, first_prompt)
+            else:
+                response = _call_gemini_chat(chat, full_user_text)
+            
+            break  # Success, exit fallback loop
+            
+        except Exception as e:
+            last_error = e
+            print(f"Chat error with {active_model.model_name}: {e}")
+            continue
 
-        # Trim if history is too long
-        if len(history) > MAX_HISTORY_MESSAGES:
-            # Keep the first 2 messages (system prompt exchange) and last N
-            keep_start = 2
-            keep_end = MAX_HISTORY_MESSAGES - keep_start
-            history[:] = history[:keep_start] + history[-keep_end:]
-
-        return {
-            "reply": response,
-            "source": "gemini",
-            "session_id": session_id,
-            "turn_count": len(history) // 2,
-        }
-
-    except Exception as e:
-        print(f"Chat error: {e}")
+    if not response:
+        print(f"Chat exhausted all models. Last error: {last_error}")
         return _fallback_chat(user_message, context_data)
+
+    # Update history with the new exchange
+    history.append({"role": "user", "parts": [full_user_text]})
+    history.append({"role": "model", "parts": [response]})
+
+    # Trim if history is too long
+    if len(history) > MAX_HISTORY_MESSAGES:
+        # Keep the first 2 messages (system prompt exchange) and last N
+        keep_start = 2
+        keep_end = MAX_HISTORY_MESSAGES - keep_start
+        history[:] = history[:keep_start] + history[-keep_end:]
+
+    return {
+        "reply": response,
+        "source": "gemini",
+        "session_id": session_id,
+        "turn_count": len(history) // 2,
+    }
 
 
 def _call_gemini_chat(chat, message: str) -> str:
