@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LexGraph AI — Legal Knowledge Graph for the Companies Act, 2013. AI-powered natural language querying with traceable graph-based answers.">
+  <title>LexGraph AI — Legal Knowledge Graph</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <!-- ============================================ -->
+  <!-- SIDEBAR -->
+  <!-- ============================================ -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <path d="M14 2L2 8v12l12 6 12-6V8L14 2z" stroke="url(#g1)" stroke-width="2" fill="none"/>
+            <path d="M14 8l-6 3v6l6 3 6-3v-6l-6-3z" fill="url(#g1)" opacity="0.3"/>
+            <circle cx="14" cy="14" r="3" fill="url(#g1)"/>
+            <defs><linearGradient id="g1" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#818cf8"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <h1>LexGraph AI</h1>
+          <span>Legal Knowledge Graph</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-nav">
+      <button class="nav-btn active" data-panel="chat" id="nav-chat">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        <span>AI Query</span>
+      </button>
+      <button class="nav-btn" data-panel="browse" id="nav-browse">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        <span>Browse</span>
+      </button>
+      <button class="nav-btn" data-panel="graph" id="nav-graph">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="3"/><circle cx="19" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><line x1="7.5" y1="7.5" x2="10.5" y2="16.5"/><line x1="16.5" y1="7.5" x2="13.5" y2="16.5"/></svg>
+        <span>Graph</span>
+      </button>
+      <button class="nav-btn" data-panel="amendments" id="nav-amendments">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <span>Amendments</span>
+      </button>
+      <button class="nav-btn" data-panel="rules" id="nav-rules">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Rules</span>
+      </button>
+    </div>
+
+    <div class="sidebar-stats" id="sidebar-stats">
+      <div class="stat-card">
+        <span class="stat-value" id="stat-sections">—</span>
+        <span class="stat-label">Sections</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-amendments">—</span>
+        <span class="stat-label">Amendments</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-rules">—</span>
+        <span class="stat-label">Rules</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-relationships">—</span>
+        <span class="stat-label">Relations</span>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="connection-status" id="connection-status">
+        <span class="status-dot"></span>
+        <span>Connecting...</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============================================ -->
+  <!-- MAIN CONTENT -->
+  <!-- ============================================ -->
+  <main class="main-content">
+
+    <!-- CHAT / AI ASSISTANT PANEL -->
+    <div class="panel active" id="panel-chat">
+      <div class="panel-header chat-panel-header">
+        <div class="chat-header-left">
+          <h2>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="url(#headerGrad)" stroke-width="2">
+              <path d="M12 2a10 10 0 0110 10c0 5.523-4.477 10-10 10a9.956 9.956 0 01-5-.134V22l.038-.003A10 10 0 012 12 10 10 0 0112 2z"/>
+              <circle cx="8" cy="12" r="1" fill="currentColor"/>
+              <circle cx="12" cy="12" r="1" fill="currentColor"/>
+              <circle cx="16" cy="12" r="1" fill="currentColor"/>
+              <defs><linearGradient id="headerGrad" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#818cf8"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs>
+            </svg>
+            LexGraph Assistant
+          </h2>
+          <div class="chat-session-info" id="chat-session-info">
+            <span class="session-dot"></span>
+            <span id="chat-status-text">New conversation</span>
+          </div>
+        </div>
+        <div class="chat-header-actions">
+          <button class="header-action-btn" id="btn-new-chat" onclick="startNewChat()" title="New conversation">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>New Chat</span>
+          </button>
+          <button class="header-action-btn danger" id="btn-clear-chat" onclick="clearCurrentChat()" title="Clear conversation">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="chat-container" id="chat-container">
+        <div class="chat-messages" id="chat-messages">
+          <!-- Welcome Screen -->
+          <div class="chat-welcome" id="chat-welcome">
+            <div class="welcome-icon">
+              <svg width="48" height="48" viewBox="0 0 28 28" fill="none">
+                <path d="M14 2L2 8v12l12 6 12-6V8L14 2z" stroke="url(#wg1)" stroke-width="1.5" fill="none"/>
+                <path d="M14 8l-6 3v6l6 3 6-3v-6l-6-3z" fill="url(#wg1)" opacity="0.2"/>
+                <circle cx="14" cy="14" r="3" fill="url(#wg1)"/>
+                <defs><linearGradient id="wg1" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#818cf8"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs>
+              </svg>
+            </div>
+            <h3>Welcome to LexGraph AI</h3>
+            <p>Your intelligent legal assistant for the Companies Act, 2013. Ask me anything about sections, amendments, rules, compliance, or corporate law concepts.</p>
+            
+            <div class="welcome-grid">
+              <div class="welcome-category">
+                <div class="welcome-category-title">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  Sections & Provisions
+                </div>
+                <button class="welcome-prompt" onclick="sendChatFromPrompt('What does Section 149 say about independent directors?')">What does Section 149 say about independent directors?</button>
+                <button class="welcome-prompt" onclick="sendChatFromPrompt('Explain Section 185 on loans to directors')">Explain Section 185 on loans to directors</button>
+              </div>
+              <div class="welcome-category">
+                <div class="welcome-category-title">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Amendments & Changes
+                </div>
+                <button class="welcome-prompt" onclick="sendChatFromPrompt('What sections were amended in 2026?')">What sections were amended in 2026?</button>
+                <button class="welcome-prompt" onclick="sendChatFromPrompt('How has Section 135 on CSR changed?')">How has Section 135 on CSR changed?</button>
+              </div>
+              <div class="welcome-category">
+                <div class="welcome-category-title">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                  Compliance & Concepts
+                </div>
+                <button class="welcome-prompt" onclick="sendChatFromPrompt('What are the duties of a company director?')">What are the duties of a company director?</button>
+                <button class="welcome-prompt" onclick="sendChatFromPrompt('Explain the process for declaring dividends')">Explain the process for declaring dividends</button>
+              </div>
+              <div class="welcome-category">
+                <div class="welcome-category-title">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  Rules & Definitions
+                </div>
+                <button class="welcome-prompt" onclick="sendChatFromPrompt('What rules apply to audit committees?')">What rules apply to audit committees?</button>
+                <button class="welcome-prompt" onclick="sendChatFromPrompt('Define small company under the Act')">Define "small company" under the Act</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-input-area">
+          <div class="input-wrapper">
+            <textarea id="chat-input" placeholder="Ask about the Companies Act, amendments, rules, compliance..." rows="1" autocomplete="off"></textarea>
+            <button id="chat-send" class="send-btn" onclick="sendChatMessage()" title="Send message">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+          <div class="input-hint">
+            <span>Press <kbd>Enter</kbd> to send • <kbd>Shift+Enter</kbd> for new line • Powered by knowledge graph grounding</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BROWSE SECTIONS PANEL -->
+    <div class="panel" id="panel-browse">
+      <div class="panel-header">
+        <h2>Browse Sections</h2>
+        <div class="search-bar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="section-search" placeholder="Search sections..." oninput="filterSections(this.value)" />
+        </div>
+      </div>
+      <div class="sections-list" id="sections-list">
+        <div class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Loading sections...</p>
+        </div>
+      </div>
+      <div class="section-detail" id="section-detail" style="display:none;">
+        <button class="back-btn" onclick="closeSectionDetail()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          Back to list
+        </button>
+        <div id="section-detail-content"></div>
+      </div>
+    </div>
+
+    <!-- GRAPH VISUALIZATION PANEL -->
+    <div class="panel" id="panel-graph">
+      <div class="panel-header">
+        <h2>Knowledge Graph</h2>
+        <p>Visual representation of the legal knowledge graph</p>
+      </div>
+      <div class="graph-container" id="graph-container">
+        <div class="graph-controls">
+          <select id="graph-section-select" onchange="loadGraphForSection(this.value)">
+            <option value="">Select a section to visualize...</option>
+          </select>
+          <button class="btn-secondary" onclick="loadFullGraphStats()">Show Full Stats</button>
+        </div>
+        <div class="graph-canvas" id="graph-canvas">
+          <div class="graph-placeholder">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"><circle cx="5" cy="6" r="3"/><circle cx="19" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><line x1="7.5" y1="7.5" x2="10.5" y2="16.5"/><line x1="16.5" y1="7.5" x2="13.5" y2="16.5"/></svg>
+            <p>Select a section to visualize its graph connections</p>
+          </div>
+        </div>
+        <div class="graph-info" id="graph-info" style="display:none;"></div>
+      </div>
+    </div>
+
+    <!-- AMENDMENTS PANEL -->
+    <div class="panel" id="panel-amendments">
+      <div class="panel-header">
+        <h2>Amendments</h2>
+        <p>Corporate Laws (Amendment) Act, 2026 — Changes to the Companies Act</p>
+      </div>
+      <div class="amendments-list" id="amendments-list">
+        <div class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Loading amendments...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- RULES PANEL -->
+    <div class="panel" id="panel-rules">
+      <div class="panel-header">
+        <h2>Rules</h2>
+        <p>Companies Rules, 2014 — Subordinate legislation under the Act</p>
+      </div>
+      <div class="rules-list" id="rules-list">
+        <div class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Loading rules...</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
