@@ -7,6 +7,8 @@ import re
 import time
 import uuid
 from pathlib import Path
+import asyncio
+
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -67,8 +69,15 @@ async def startup():
     # Show current config
     settings.validate()
 
-    # Initialize PDF extraction (parse all 3 PDFs)
-    _pdf_ready = init_pdf_service()
+    # Initialize PDF extraction in the background
+    def bg_pdf_init():
+        global _pdf_ready
+        _pdf_ready = init_pdf_service()
+        if _pdf_ready:
+            print("\n[INFO] Background PDF initialization complete.")
+
+    loop = asyncio.get_running_loop()
+    loop.run_in_executor(None, bg_pdf_init)
 
     # Initialize AI
     _gemini_ready = init_llm()
