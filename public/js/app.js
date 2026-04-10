@@ -239,12 +239,6 @@ function addAIMessage(text, source, hasContext) {
   }
 
   msg.innerHTML = `
-    <div class="message-avatar ai-avatar">
-      <svg width="18" height="18" viewBox="0 0 28 28" fill="none">
-        <path d="M14 2L2 8v12l12 6 12-6V8L14 2z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-        <circle cx="14" cy="14" r="3" fill="currentColor" opacity="0.6"/>
-      </svg>
-    </div>
     <div class="message-content ai-content">
       <div class="ai-response-text">${renderedText}</div>
       ${metaHtml}
@@ -283,12 +277,6 @@ function showTypingIndicator() {
   indicator.id = 'typing-indicator';
 
   indicator.innerHTML = `
-    <div class="message-avatar ai-avatar">
-      <svg width="18" height="18" viewBox="0 0 28 28" fill="none">
-        <path d="M14 2L2 8v12l12 6 12-6V8L14 2z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-        <circle cx="14" cy="14" r="3" fill="currentColor" opacity="0.6"/>
-      </svg>
-    </div>
     <div class="message-content ai-content">
       <div class="typing-indicator">
         <div class="typing-text">Analyzing with knowledge graph</div>

@@ -139,8 +139,9 @@ body {
   font-weight: 700;
   background: linear-gradient(135deg, var(--accent-light), var(--accent));
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
   letter-spacing: -0.02em;
 }
 
@@ -456,8 +457,9 @@ body {
   margin-bottom: 8px;
   background: linear-gradient(135deg, var(--text-primary), var(--accent-light));
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .chat-welcome > p {
@@ -1494,7 +1496,9 @@ body {
   font-family: var(--font-mono);
   background: linear-gradient(135deg, var(--accent-light), var(--accent));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .stats-item-label {
