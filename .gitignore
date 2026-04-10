@@ -25,6 +25,9 @@ package-lock.json
 *.sublime-project
 *.sublime-workspace
 
+# PDFs (large source documents — see README for download links)
+*.pdf
+
 # OS
 .DS_Store
 Thumbs.db
