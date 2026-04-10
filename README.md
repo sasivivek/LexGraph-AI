@@ -390,53 +390,7 @@ The intelligence layer uses **Google Gemini (gemini-2.0-flash)** for:
 
 ---
 
-## 📁 Project Structure
 
-```
-LexGraph AI/
-├── .env.example                      # Environment template
-├── .gitignore                        # Git ignore rules
-├── requirements.txt                  # Python dependencies
-├── run.py                            # Server entry point (uvicorn)
-├── README.md                         # This file
-│
-├── app/                              # Backend application
-│   ├── __init__.py
-│   ├── config.py                     # Settings (env vars, validation)
-│   ├── main.py                       # FastAPI routes, middleware, startup
-│   │
-│   ├── db/                           # Database layer
-│   │   ├── neo4j_client.py           # Neo4j driver singleton + query execution
-│   │   ├── schema.py                 # Constraints, indexes, schema init
-│   │   ├── ingest.py                 # Two-phase data ingestion pipeline
-│   │   └── memory_store.py           # In-memory fallback (no DB required)
-│   │
-│   ├── data/                         # Data sources
-│   │   ├── sample_data.py            # Curated legal dataset (48 KB)
-│   │   └── pdf_service.py            # PDF extraction + search (pdfplumber)
-│   │
-│   ├── queries/                      # Query library
-│   │   └── cypher_queries.py         # 15+ pre-built Cypher queries
-│   │
-│   └── ai/                           # AI layer
-│       ├── prompts.py                # System prompts + few-shot examples
-│       └── llm_service.py            # Gemini integration + fallback logic
-│
-├── scripts/                          # CLI tools
-│   └── ingest_data.py                # Standalone data ingestion script
-│
-├── public/                           # Frontend (served by FastAPI)
-│   ├── index.html                    # Main HTML (premium dark UI)
-│   ├── css/styles.css                # Styling (glassmorphism, animations)
-│   └── js/app.js                     # Client-side logic (chat, browse, graph)
-│
-└── *.pdf                             # Source legal documents (3 PDFs, ~10 MB)
-    ├── Companies Act, 2013.pdf
-    ├── Companies Rules, 2014.pdf
-    └── Corporate Laws (Amendment) Act, 2026 - converted.pdf
-```
-
----
 
 ## 📊 Technology Stack
 
@@ -450,19 +404,7 @@ LexGraph AI/
 | **Query Language** | Cypher                             | Graph traversal and pattern matching |
 | **Server**         | Uvicorn (ASGI)                     | High-performance async server        |
 
----
 
-## 📊 Data Coverage
-
-| Source Document                           | Pages | Extracted             |
-|-------------------------------------------|-------|-----------------------|
-| Companies Act, 2013                       | 370   | 421 sections indexed  |
-| Companies Rules, 2014                     | 195   | 43 rule entries       |
-| Corporate Laws (Amendment) Act, 2026      | 98    | 45 amendment clauses  |
-
-**Total Graph Size**: ~550 nodes, ~290 relationships (when fully ingested)
-
----
 
 ## 📝 License
 
